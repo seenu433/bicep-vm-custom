@@ -1,9 +1,6 @@
 // Parameters
 @description('Azure location to which the resources are to be deployed')
-param location string
-
-@description('The full id string identifying the target subnet for the VM')
-param subnetId string
+param location string = 'eastus'
 
 @description('Disk type of the IS disk')
 param osDiskType string = 'Standard_LRS'
@@ -12,26 +9,25 @@ param osDiskType string = 'Standard_LRS'
 param vmSize string = 'Standard_D4_v3'
 
 @description('The user name to be used as the Administrator for all VMs created by this deployment')
-param username string
+param username string='test_username'
 
 @description('The password for the Administrator user for all VMs created by this deployment')
-param password string
+param password string='$1test_password'
 
 @description('Windows OS Version indicator')
 param windowsOSVersion string = '2016-Datacenter'
 
 @description('Name of the VM to be created')
-param vmName string
+param vmName string = 'azuredevops-dev'
 
 @description('Indicator to guide whether the CI/CD agent script should be run or not')
-param deployAgent bool=false
+param deployAgent bool=true
 
 @description('The Azure DevOps or GitHub account name')
-param accountName string=''
+param accountName string='https://dev.azure.com/srpadala'
 
 @description('The personal access token to connect to Azure DevOps or Github')
-@secure()
-param personalAccessToken string=''
+param personalAccessToken string='wely3uliupfxrnyyoln2e4vwlucs7pbqlv67fjwaacumpyrfawda'
 
 @description('The name Azure DevOps or GitHub pool for this build agent to join. Use \'Default\' if you don\'t have a separate pool.')
 param poolName string = 'Default'
@@ -42,7 +38,7 @@ param poolName string = 'Default'
   'azuredevops'
   'none'
 ])
-param CICDAgentType string
+param CICDAgentType string='azuredevops'
 
 @description('The base URI where the CI/CD agent artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated.')
 param artifactsLocation string = 'https://raw.githubusercontent.com/seenu433/bicep-vm-custom/main/agentsetup.ps1'
@@ -50,15 +46,6 @@ param artifactsLocation string = 'https://raw.githubusercontent.com/seenu433/bic
 // Variables
 var AgentName = 'agent-${vmName}'
 
-// Bring in the nic
-module nic './vm-nic.bicep' = {
-  name: '${vmName}-nic'
-  params: {
-    location: location
-    subnetId: subnetId
-    vmName: vmName
-  }
-}
 
 // Create the vm
 resource vm 'Microsoft.Compute/virtualMachines@2021-04-01' = {
@@ -93,7 +80,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-04-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: nic.outputs.nicId
+          id: '/subscriptions/700d9ddb-edfa-43c7-9028-7936c4676a7a/resourceGroups/rg-shared-srpadala-dev-eastus-001/providers/Microsoft.Network/networkInterfaces/azuredevops-dev-nic'
         }
       ]
     }

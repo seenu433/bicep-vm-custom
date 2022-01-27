@@ -18,9 +18,7 @@ function setupazdevops{
     Write-Host "About to setup Azure DevOps Agent"
     Start-Transcript
     Write-Host "start"
-    
-    installAzCli
-    
+      
     $azagentdir="c:\agent"
     
     #test if an old installation exists, if so, delete the folder
@@ -67,12 +65,6 @@ function setupazdevops{
     exit 0
 }
 
-function installAzCli {
-    Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi
-    Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'
-    Remove-Item .\AzureCLI.msi
-}
-
 function setupghrunner {
     param(
 
@@ -83,8 +75,6 @@ function setupghrunner {
     )
     
     Start-Transcript
-
-    installAzCli
 
     Write-Host "About to setup GitHub Runner"
     $ghrunnerdirectory="c:\actions-runner"
