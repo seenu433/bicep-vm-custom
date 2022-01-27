@@ -137,6 +137,8 @@ Write-Output $POOL
 Write-Output $AGENT
 Write-Output $AGENTTYPE
 
+$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; rm .\AzureCLI.msi
+
 if ($AGENTTYPE.ToLower() -eq "azuredevops")
 {
     setupazdevops -URL $URL -PAT $PAT -POOL $POOL -AGENT $AGENT
