@@ -27,7 +27,8 @@ param deployAgent bool=true
 param accountName string='https://dev.azure.com/srpadala'
 
 @description('The personal access token to connect to Azure DevOps or Github')
-param personalAccessToken string='wely3uliupfxrnyyoln2e4vwlucs7pbqlv67fjwaacumpyrfawda'
+@secure()
+param personalAccessToken string=''
 
 @description('The name Azure DevOps or GitHub pool for this build agent to join. Use \'Default\' if you don\'t have a separate pool.')
 param poolName string = 'Default'
